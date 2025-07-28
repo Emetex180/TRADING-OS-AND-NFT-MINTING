@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section style="max-width: 1000px; margin: 2rem auto; padding: 1rem;">
+    <h2 style="text-align: center; font-size: 2rem; margin-bottom: 1rem; color: #1f2937;">Your Trades</h2>
+
+    <div style="background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+        <h3 style="font-size: 1.5rem; color: #374151;">Your Performance</h3>
+        <div>{{ graph|safe }}</div>
+    </div>
+
+    <div style="text-align: right; margin-bottom: 1rem;">
+        <button onclick="mintAllTrades()" style="background-color: #10b981; color: white; padding: 0.5rem 1rem; border: none; border-radius: 8px; cursor: pointer;">
+            🪙 Mint All Trades as NFTs
+        </button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+            <thead style="background: #4b5563; color: white;">
+                <tr>
+                    <th style="padding: 0.75rem;">Pair</th>
+                    <th style="padding: 0.75rem;">Result</th>
+                    <th style="padding: 0.75rem;">Entry</th>
+                    <th style="padding: 0.75rem;">Exit</th>
+                    <th style="padding: 0.75rem;">Notes</th>
+                    <th style="padding: 0.75rem;">Screenshot</th>
+                    <th style="padding: 0.75rem;">Date</th>
+                    <th style="padding: 0.75rem;">Mint</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trade in trades %}
+                <tr style="border-top: 1px solid #e5e7eb;">
+                    <td style="padding: 0.75rem; text-align: center;">{{ trade[0] }}</td>
+                    <td style="padding: 0.75rem; text-align: center;">{{ trade[1] }}</td>
+                    <td style="padding: 0.75rem; text-align: center;">{{ trade[2] }}</td>
+                    <td style="padding: 0.75rem; text-align: center;">{{ trade[3] }}</td>
+                    <td style="padding: 0.75rem; text-align: center;">{{ trade[4] }}</td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        {% if trade[5] %}
+                        <img src="{{ url_for('uploaded_file', filename=trade[5]) }}"
+                             width="100"
+                             style="border-radius: 8px; cursor: pointer;"
+                             onclick="openModal('{{ url_for('uploaded_file', filename=trade[5]) }}')" />
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.75rem; text-align: center;">{{ trade[6] }}</td>
+                    <td style="padding: 0.75rem; text-align: center;">
+                        <button onclick="mintSingleTrade({{ loop.index0 }})"
+                            style="background-color: #3b82f6; color: white; padding: 0.25rem 0.75rem; border: none; border-radius: 6px; cursor: pointer;">
+                            Mint NFT
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Modal for preview -->
+<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+    <span onclick="closeModal()" style="position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer;">&times;</span>
+    <img id="modalImage" src="" alt="Preview" style="max-width: 90%; max-height: 90%; border-radius: 10px;" />
+</div>
+
+<script>
+    function openModal(imageSrc) {
+        document.getElementById("modalImage").src = imageSrc;
+        document.getElementById("imageModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
+
+    document.getElementById("imageModal").addEventListener("click", function (e) {
+        if (e.target === this) closeModal();
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script>
+    const contractAddress = "0x40D7562485D8FA64A1D4755DcBbA305D56EA031f";
+    const contractABI = [
+      {
+        "inputs": [
+          { "internalType": "address", "name": "recipient", "type": "address" },
+          { "internalType": "string", "name": "tokenURI", "type": "string" }
+        ],
+        "name": "mintNFT",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ];
+
+    const trades = {{ trades|tojson }};
+
+    async function connectWallet() {
+        if (!window.ethereum) {
+            alert("Please install MetaMask first.");
+            return null;
+        }
+        await ethereum.request({ method: "eth_requestAccounts" });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        return new ethers.Contract(contractAddress, contractABI, signer);
+    }
+
+    async function uploadToIPFS(trade) {
+        const metadata = {
+            name: `Trade - ${trade[0]}`,
+            description: trade[4] || "",
+            image: trade[5] ? window.location.origin + "/uploads/" + trade[5] : "",
+            attributes: [
+                { trait_type: "Pair", value: trade[0] },
+                { trait_type: "Result", value: trade[1] },
+                { trait_type: "Entry", value: trade[2] },
+                { trait_type: "Exit", value: trade[3] },
+                { trait_type: "Date", value: trade[6] }
+            ]
+        };
+
+        const response = await fetch("https://api.nft.storage/upload", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer c83bc42b.d88417357a3a4fb4829a33732ff31602",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(metadata)
+        });
+
+        const result = await response.json();
+        return `https://ipfs.io/ipfs/${result.value.cid}`;
+    }
+
+    async function mintSingleTrade(index) {
+        const trade = trades[index];
+        const contract = await connectWallet();
+        if (!contract) return;
+        const tokenURI = await uploadToIPFS(trade);
+        const address = await contract.signer.getAddress();
+        const tx = await contract.mintNFT(address, tokenURI);
+        await tx.wait();
+        alert("NFT minted for this trade!");
+    }
+
+    async function mintAllTrades() {
+        const contract = await connectWallet();
+        if (!contract) return;
+        const address = await contract.signer.getAddress();
+        for (const trade of trades) {
+            const tokenURI = await uploadToIPFS(trade);
+            const tx = await contract.mintNFT(address, tokenURI);
+            await tx.wait();
+        }
+        alert("All NFTs minted!");
+    }
+</script>
+{% endblock %}

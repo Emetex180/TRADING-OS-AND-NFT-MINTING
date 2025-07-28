@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-xl transition-all duration-500">
+    <h2 class="text-4xl font-bold text-center mb-8 text-gray-800 tracking-tight">Trader Registration</h2>
+
+    <form method="post" class="space-y-6 animate-fade-in-up">
+      {% if csrf_token %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {% endif %}
+
+      <div class="grid grid-cols-1 gap-6">
+        <!-- Personal Info -->
+        <div>
+          <label for="fullname" class="block text-sm font-semibold text-gray-700">Full Name</label>
+          <input id="fullname" name="fullname" type="text" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="John Doe">
+        </div>
+        <div>
+          <label for="username" class="block text-sm font-semibold text-gray-700">Username</label>
+          <input id="username" name="username" type="text" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="johndoe123">
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-semibold text-gray-700">Email Address</label>
+          <input id="email" name="email" type="email" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="you@example.com">
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-semibold text-gray-700">Phone Number</label>
+          <input id="phone" name="phone" type="tel" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="+1234567890">
+        </div>
+
+        <!-- Trading Details -->
+        <div>
+          <label for="experience" class="block text-sm font-semibold text-gray-700">Trading Experience</label>
+          <select id="experience" name="experience" required
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+        <div>
+          <label for="risk_tolerance" class="block text-sm font-semibold text-gray-700">Risk Tolerance</label>
+          <select id="risk_tolerance" name="risk_tolerance" required
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select tolerance</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div>
+          <label for="account_type" class="block text-sm font-semibold text-gray-700">Account Type</label>
+          <select id="account_type" name="account_type" required
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select account</option>
+            <option value="demo">Demo</option>
+            <option value="live">Live</option>
+          </select>
+        </div>
+        <div class="mb-4">
+    <label for="trader_type" class="block text-gray-700 font-bold mb-2">Type of Trader</label>
+    <select name="trader_type" id="trader_type" class="w-full p-2 border border-gray-300 rounded">
+        <option value="" disabled selected>Select your trader type</option>
+        <option value="Scalper">Scalper</option>
+        <option value="Day Trader">Day Trader</option>
+        <option value="Swing Trader">Swing Trader</option>
+        <option value="Position Trader">Position Trader</option>
+        <option value="Investor">Investor</option>
+    </select>
+</div>
+
+        <!-- Security -->
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
+          <input id="password" name="password" type="password" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="••••••••">
+        </div>
+        <div>
+          <label for="confirm_password" class="block text-sm font-semibold text-gray-700">Confirm Password</label>
+          <input id="confirm_password" name="confirm_password" type="password" required
+                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="••••••••">
+        </div>
+
+        <!-- Terms -->
+        <div class="flex items-center">
+          <input id="terms" name="terms" type="checkbox" required
+                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+          <label for="terms" class="ml-2 block text-sm text-gray-700">
+            I agree to the <a href="/terms" class="text-indigo-600 hover:underline">Terms & Conditions</a>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit"
+              class="w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200">
+        Register Now
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-gray-500">
+      Already a member?
+      <a href="{{ url_for('login') }}" class="text-indigo-600 hover:underline font-medium">Log In</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

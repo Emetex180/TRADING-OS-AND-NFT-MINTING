@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="form-title">Log New Trade</h2>
+<form method="POST" enctype="multipart/form-data" class="trade-form">
+    <div class="form-group">
+        <label for="pair">Pair (e.g. EURUSD):</label>
+        <input type="text" name="pair" placeholder="Pair (e.g. EURUSD)" required class="input-field">
+    </div>
+
+    <div class="form-group">
+        <label for="result">Win/Loss:</label>
+        <input type="text" name="result" placeholder="Win/Loss" required class="input-field">
+    </div>
+
+    <div class="form-group">
+        <label for="entry">Entry Price:</label>
+        <input type="number" step="any" name="entry" placeholder="Entry Price" required class="input-field">
+    </div>
+
+    <div class="form-group">
+        <label for="exit">Exit Price:</label>
+        <input type="number" step="any" name="exit" placeholder="Exit Price" required class="input-field">
+    </div>
+
+    <div class="form-group">
+        <label for="notes">Notes:</label>
+        <textarea name="notes" placeholder="Notes" class="input-field"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="date">Trade Date:</label>
+        <input type="date" name="date" required class="input-field">
+    </div>
+
+    <div class="form-group">
+        <label for="screenshot">Upload Screenshot:</label>
+        <input type="file" name="screenshot" accept="image/*" class="input-field">
+    </div>
+
+    <button type="submit" class="submit-btn">Submit</button>
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    .form-title {
+        text-align: center;
+        color: #1f2937;
+        margin-bottom: 2.5rem;
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .trade-form {
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 2.5rem;
+        background: #fefefe;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-group {
+        margin-bottom: 1.7rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 0.9rem;
+        font-size: 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: #f9fafb;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    .input-field:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        outline: none;
+        background-color: #fff;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    .submit-btn:active {
+        background-color: #1d4ed8;
+    }
+
+    @media (max-width: 640px) {
+        .trade-form {
+            padding: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+        }
+
+        .input-field, .submit-btn {
+            font-size: 0.95rem;
+        }
+    }
+</style>
+{% endblock %}
