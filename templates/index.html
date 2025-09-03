@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,149 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <canvas id="testChart" width="400" height="400"></canvas>
     <h1>Emediong Edoho</h1>
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script>
-        const ctx = document.getElementById('testChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Win', 'Loss'],
-                datasets: [{
-                    data: [3, 2],
-                    backgroundColor: ['green', 'red']
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
-    </script>
 </body>
 </html>
+{% endblock %}
