@@ -6,40 +6,42 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import plotly.graph_objects as go
 import plotly.io as py
 
-# NFT Minting imports
-from web3 import Web3
-from dotenv import load_dotenv
-import json
+# =====================================================
+#  NFT Minting imports (COMMENTED OUT FOR NOW)
+# =====================================================
+# from web3 import Web3
+# from dotenv import load_dotenv
+# import json
 
-# Load environment variables
-load_dotenv()
+# # Load environment variables
+# load_dotenv()
 
-# Web3 setup
-w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER")))
-private_key = os.getenv("PRIVATE_KEY")
-wallet_address = os.getenv("WALLET_ADDRESS")
-contract_address = os.getenv("CONTRACT_ADDRESS")
+# # Web3 setup
+# w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER")))
+# private_key = os.getenv("PRIVATE_KEY")
+# wallet_address = os.getenv("WALLET_ADDRESS")
+# contract_address = os.getenv("CONTRACT_ADDRESS")
 
-with open("nft_abi.json") as f:
-    abi = json.load(f)
+# with open("nft_abi.json") as f:
+#     abi = json.load(f)
 
-contract = w3.eth.contract(address=contract_address, abi=abi)
+# contract = w3.eth.contract(address=contract_address, abi=abi)
 
-def mint_trade_nft(to_address, token_uri):
-    nonce = w3.eth.get_transaction_count(wallet_address)
+# def mint_trade_nft(to_address, token_uri):
+#     nonce = w3.eth.get_transaction_count(wallet_address)
+#     txn = contract.functions.safeMint(to_address, token_uri).build_transaction({
+#         'from': wallet_address,
+#         'nonce': nonce,
+#         'gas': 300000,
+#         'gasPrice': w3.to_wei('50', 'gwei')
+#     })
+#     signed_txn = w3.eth.account.sign_transaction(txn, private_key=private_key)
+#     tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+#     return w3.to_hex(tx_hash)
 
-    txn = contract.functions.safeMint(to_address, token_uri).build_transaction({
-        'from': wallet_address,
-        'nonce': nonce,
-        'gas': 300000,
-        'gasPrice': w3.to_wei('50', 'gwei')
-    })
-
-    signed_txn = w3.eth.account.sign_transaction(txn, private_key=private_key)
-    tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
-
-    return w3.to_hex(tx_hash)
-
+# =====================================================
+#  Flask Setup
+# =====================================================
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
@@ -49,8 +51,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def init_db():
     conn = sqlite3.connect("database.db")
@@ -76,13 +80,16 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 @app.context_processor
 def inject_user():
     return dict(session=session)
 
+
 @app.route('/')
 def home():
     return render_template("base.html")
+
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
@@ -105,6 +112,7 @@ def register():
             conn.close()
     return render_template("register.html")
 
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -125,6 +133,7 @@ def login():
         else:
             flash("Invalid credentials.", "danger")
     return render_template("login.html")
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -156,6 +165,7 @@ def dashboard():
     conn.close()
     return render_template("dashboard.html", trades=trades, graph=graph)
 
+
 @app.route('/log_trade', methods=["GET", "POST"])
 def log_trade():
     if "user_id" not in session:
@@ -185,17 +195,13 @@ def log_trade():
         conn.commit()
         conn.close()
 
-        # ✅ NFT minting after logging the trade
-        token_uri = f"https://yourdomain.com/api/trade_metadata/{pair}_{date}.json"
-        try:
-            tx_hash = mint_trade_nft(wallet_address, token_uri)
-            flash(f"Trade logged and NFT minted successfully! Transaction Hash: {tx_hash}", "success")
-        except Exception as e:
-            flash(f"Trade logged but NFT minting failed: {e}", "danger")
+        # NFT minting temporarily disabled
+        flash("Trade logged successfully!", "success")
 
         return redirect("/dashboard")
 
     return render_template("log_trade.html")
+
 
 @app.route('/api/trade_metadata/<pair>_<date>.json')
 def trade_metadata(pair, date):
@@ -222,15 +228,18 @@ def trade_metadata(pair, date):
     }
     return jsonify(metadata)
 
+
 @app.route('/logout', methods=["POST"])
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect("/login")
 
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 if __name__ == '__main__':
     init_db()
