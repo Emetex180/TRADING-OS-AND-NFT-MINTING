@@ -1,11 +1,109 @@
 {% extends "base.html" %}
+{% block title %}EliteTrader Journal{% endblock %}
 {% block content %}
-    <h1>Elite</h1>
-    <p>We are updated  iiiii
-        for you the server soon</p>
+
+<style>
+.rocket-icon i {
+    color: white;               /* Icon color */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.rocket-icon:hover i {
+    color: #f59e0b;             /* Changes to a bright color on hover */
+    transform: translateY(-5px) rotate(20deg) scale(1.2); /* Fly effect */
+}
+</style>
+<!-- Hero Section -->
+<section class="text-center py-20 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-5xl font-extrabold mb-6 tracking-tight">EliteTrader Journal</h2>
+    <p class="text-xl mb-8 opacity-90">Track. Analyze. Grow. Become an Elite Trader 
+        <a href="#" class="rocket-icon">
+        <i class="fas fa-rocket fa-2x"></i>
+        </a>
+    </p>
+
+    <a href="#roadmap" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold shadow hover:bg-gray-100 transition">See Our Roadmap</a>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="container mx-auto py-20 px-6">
+  <div class="text-center mb-10">
+    <h3 class="text-3xl font-bold">About EliteTrader Journal</h3>
+    <div class="w-20 h-1 bg-indigo-500 mx-auto mt-2 rounded"></div>
+  </div>
+  <p class="text-lg text-gray-700 text-center max-w-2xl mx-auto leading-relaxed">
+    EliteTrader Journal is a professional trading log that helps traders track performance, analyze strategies, and make informed, data-driven decisions.
+
+Record every trade, monitor risk, and gain insights into your strategy and trading psychology all in one place. Ideal for traders and investors looking to optimize performance and showcase accountability.
+  </p>
+</section>
+
+<!-- Roadmap Section -->
+<section id="roadmap" class="bg-gray-50 py-20 px-6">
+  <div class="text-center mb-12">
+    <h3 class="text-3xl font-bold">Roadmap</h3>
+    <div class="w-20 h-1 bg-indigo-500 mx-auto mt-2 rounded"></div>
+  </div>
+  
+  <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+    <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition">
+      <h4 class="font-bold text-xl mb-2">✅ Phase 1: Core Journal Features</h4>
+      <p class="text-gray-600">Basic trade logging, user authentication, and performance analytics.</p>
+    </div>
+    <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition">
+      <h4 class="font-bold text-xl mb-2">🚧 Phase 2: Advanced Analytics</h4>
+      <p class="text-gray-600">Charts, risk management tools, and AI-powered trade insights.</p>
+    </div>
+    <div class="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition">
+      <h4 class="font-bold text-xl mb-2">🔮 Phase 3: NFT Integration</h4>
+      <p class="text-gray-600">Mint trading journals as NFTs and explore blockchain integration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 text-center bg-gradient-to-l from-indigo-600 via-blue-600 to-cyan-500 text-white">
+  <h3 class="text-3xl font-bold mb-4">Ready to Elevate Your Trading?</h3>
+  <p class="text-lg mb-6">Join now and take control of your trading journey with EliteTrader Journal.</p>
+  <a href="/register" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold shadow hover:bg-gray-100 transition">
+    Get Started
+  </a>
+</section>
+
+   <!-- FOOTER -->
+<footer class="bg-gray-900 py-10">
+  <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center">
+
+    <!-- Branding -->
+    <div class="mb-6 md:mb-0 text-center md:text-left">
+      <h2 class="text-2xl font-bold text-white">EliteTrader Journal</h2>
+      <p class="mt-2 text-sm text-gray-400">Track, analyze, and grow your trading journey.</p>
+    </div>
+
+    <!-- Social Links -->
+    <a href="https://facebook.com/yourpage" target="_blank" class="text-white hover:text-blue-600 transition">
+    <i class="fab fa-facebook-f fa-lg"></i>
+    </a>
+    <a href="https://x.com/yourhandle" target="_blank" class="text-white hover:text-sky-400 transition">
+    <i class="fab fa-x fa-lg"></i>
+    </a>
+    <a href="https://linkedin.com/in/yourprofile" target="_blank" class="text-white hover:text-blue-700 transition">
+    <i class="fab fa-linkedin-in fa-lg"></i>
+    </a>
+    <a href="https://yourwebsite.com" target="_blank" class="text-white hover:text-cyan-400 transition">
+    <i class="fa-solid fa-globe fa-lg"></i>
+    </a>
 
 
 
+    <!-- Copyright -->
+    <div class="text-center md:text-right text-sm text-gray-400">
+      &copy; 2025 EliteTrader Journal. All rights reserved.
+    </div>
+  </div>
+</footer>
 
 
 {% endblock %}

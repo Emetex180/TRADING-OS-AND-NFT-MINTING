@@ -10,7 +10,11 @@
 
     <div class="form-group">
         <label for="result">Win/Loss:</label>
-        <input type="text" name="result" placeholder="Win/Loss" required class="input-field">
+        <select name="result" required class="input-field">
+            <option value="" disabled selected>Select Outcome</option>
+            <option value="Win">Win ✅</option>
+            <option value="Loss">Loss ❌</option>
+        </select>
     </div>
 
     <div class="form-group">
@@ -102,7 +106,7 @@
         padding: 1rem;
         font-size: 1.1rem;
         font-weight: 600;
-        background-color: #3b82f6;
+        background: linear-gradient(to right, #4f46e5, #2563eb, #0891b2);
         color: white;
         border: none;
         border-radius: 8px;
@@ -110,7 +114,6 @@
     }
 
     .submit-btn:hover {
-        background-color: #2563eb;
         transform: translateY(-2px);
     }
 

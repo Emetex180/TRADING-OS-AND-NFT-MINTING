@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Trade Logger</title>
-    <!-- In base.html head section -->
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
+    <title>EliteTrader Journal</title>
+    <!-- Tailwind CSS -->
+     
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome Kit -->
+   <script src="https://kit.fontawesome.com/4c455a2408.js" crossorigin="anonymous"></script>
     {% block style %}{% endblock %}
 
     <style>
@@ -16,12 +18,14 @@
             background: #f5f7fa;
         }
 
+        /* NAV BAR WITH BLUE GRADIENT */
         nav {
-            background: #1f2937;
+            background: linear-gradient(to right, #4f46e5, #2563eb, #0891b2);
             padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: white;
         }
 
         nav a, nav form button {
@@ -29,7 +33,7 @@
             text-decoration: none;
             margin: 0.5rem;
             font-weight: bold;
-            background: #4b5563;
+            background: rgba(255, 255, 255, 0.2);
             padding: 0.5rem 1rem;
             border-radius: 5px;
             transition: background 0.3s;
@@ -37,14 +41,12 @@
         }
 
         nav a:hover, nav form button:hover {
-            background: #6b7280;
+            background: rgba(255, 255, 255, 0.4);
         }
 
-        nav form {
-            margin: 0;
-        }
+        nav form { margin: 0; }
 
-        /* Hamburger icon styles */
+        /* Hamburger icon */
         .hamburger {
             display: none;
             cursor: pointer;
@@ -61,7 +63,7 @@
             border-radius: 2px;
         }
 
-        /* Mobile menu styling */
+        /* Mobile menu */
         .nav-links {
             display: flex;
             align-items: center;
@@ -73,7 +75,7 @@
                 width: 100%;
                 flex-direction: column;
                 align-items: center;
-                background: #1f2937;
+                background: linear-gradient(to right, #4f46e5, #2563eb, #0891b2);
                 position: absolute;
                 top: 60px;
                 left: 0;
@@ -86,17 +88,39 @@
                 padding: 1rem;
             }
 
-            .hamburger {
-                display: flex;
-            }
+            .hamburger { display: flex; }
 
-            .nav-links.active {
-                display: flex;
-            }
+            .nav-links.active { display: flex; }
+        }
+
+        /* FLASH MESSAGES STYLES */
+        .flash-message {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .flash-success { background-color: #16a34a; }  /* green */
+        .flash-info    { background-color: #3b82f6; }  /* blue */
+        .flash-warning { background-color: #f59e0b; }  /* yellow/orange */
+        .flash-danger  { background-color: #dc2626; }  /* red */
+
+        .flash-hide {
+            opacity: 0;
+            transform: translateY(-20px);
         }
     </style>
 </head>
 <body>
+    <!-- NAVIGATION -->
     <nav>
         <a href="/">Home</a>
         <div class="hamburger" onclick="toggleMenu()">
@@ -119,13 +143,16 @@
         </div>
     </nav>
 
+    <!-- FLASH MESSAGES -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <ul>
+            <div id="flash-container">
                 {% for category, message in messages %}
-                    <li>{{ message }}</li>
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         {% endif %}
     {% endwith %}
 
@@ -136,6 +163,17 @@
             const menu = document.querySelector('.nav-links');
             menu.classList.toggle('active');
         }
+
+        // AUTO-HIDE FLASH MESSAGES AFTER 5 SECONDS
+        window.addEventListener('DOMContentLoaded', () => {
+            const flashes = document.querySelectorAll('.flash-message');
+            flashes.forEach(flash => {
+                setTimeout(() => {
+                    flash.classList.add('flash-hide');
+                    setTimeout(() => flash.remove(), 500); // remove from DOM after fade
+                }, 5000); // 5 seconds
+            });
+        });
     </script>
 </body>
 </html>

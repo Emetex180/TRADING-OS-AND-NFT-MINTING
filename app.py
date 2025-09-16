@@ -258,7 +258,6 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import plotly.graph_objects as go
 import plotly.io as py
-from livereload import Server
 
 # =====================================================
 #  Flask Setup
@@ -452,11 +451,12 @@ def trade_metadata(pair, date):
     return jsonify(metadata)
 
 
-@app.route('/logout')
+@app.route('/logout', methods=["POST"])
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
-    return redirect("/login")
+    return redirect("/")
+
 
 
 @app.route('/uploads/<filename>')
@@ -466,6 +466,5 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     init_db()
-    server = Server(app.wsgi_app)
-    server.serve(debug=True, port=5000)  # this replaces app.run()
+    app.run(debug=True)
 
