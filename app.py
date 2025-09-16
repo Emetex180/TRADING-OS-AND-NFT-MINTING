@@ -258,6 +258,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import plotly.graph_objects as go
 import plotly.io as py
+from livereload import Server
 
 # =====================================================
 #  Flask Setup
@@ -465,5 +466,6 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    server = Server(app.wsgi_app)
+    server.serve(debug=True, port=5000)  # this replaces app.run()
 
